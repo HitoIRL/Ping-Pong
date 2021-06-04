@@ -1,0 +1,10 @@
+# binary output
+bin/
+bin-int/
+
+# visual studio
+.vs/
+**.sln
+**.vcxproj
+**.user
+**.filters
