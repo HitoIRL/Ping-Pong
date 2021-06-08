@@ -15,6 +15,8 @@ opengl::window::window(const std::string& title, const glm::uvec2& size) : proje
 	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)); // init glad
 
 	glViewport(0, 0, size.x, size.y);
+
+	// todo: error callback, logger
 }
 
 opengl::window::~window()
@@ -29,4 +31,9 @@ bool opengl::window::refresh()
 	glfwPollEvents();
 
 	return !glfwWindowShouldClose(glfw);
+}
+
+const glm::mat4& opengl::window::getProjection() const
+{
+	return projection;
 }

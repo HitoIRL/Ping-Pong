@@ -16,8 +16,9 @@ namespace opengl
 		~window();
 
 		bool refresh();
+		const glm::mat4& getProjection() const;
 	private:
 		GLFWwindow* glfw; // glfw window
-		const glm::mat4x2 projection;
+		const glm::mat4 projection;
 	};
 }
