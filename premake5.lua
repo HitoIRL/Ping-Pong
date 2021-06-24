@@ -5,7 +5,8 @@ local dep = "%{wks.location}/deps/"
 includes = {
     glad = dep .. "glad/include",
     glfw = dep .. "glfw/include",
-    glm = dep .. "glm"
+    glm = dep .. "glm",
+    enet = dep .. "enet/include"
 }
 
 workspace "ping pong"
@@ -13,6 +14,8 @@ workspace "ping pong"
     architecture "x86_64"
     startproject "game"
 
-    include "src"
+    include "client"
+    include "server"
     include "deps/glad"
     include "deps/glfw"
+    include "deps/enet"

@@ -1,7 +1,7 @@
 project "glad"
     kind "StaticLib"
     language "C"
-    staticruntime "On"
+    staticruntime "on"
 
     targetdir(target)
     objdir(obj)
@@ -11,8 +11,8 @@ project "glad"
 
     filter "configurations:debug"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:release"
         runtime "Release"
-        optimize "On"
+        optimize "on"

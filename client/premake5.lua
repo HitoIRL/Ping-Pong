@@ -1,4 +1,4 @@
-project "game"
+project "client"
     kind "ConsoleApp"
 
     language "C++"
@@ -15,7 +15,8 @@ project "game"
 
     filter "configurations:debug"
         runtime "Debug"
-		symbols "On"
+		symbols "on"
+        
     filter "configurations:release"
         runtime "Release"
-		optimize "On"
+		optimize "on"

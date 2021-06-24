@@ -65,18 +65,18 @@ void opengl::renderer::render()
 	vertices.clear();
 }
 
-void opengl::renderer::rect(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color)
+void opengl::renderer::add(const rect& rect)
 {
 	if (vertices.size() >= maxVertices)
 		render();
 
 	const glm::vec2 positions[] = {
-		{ position.x, position.y + size.y }, // bottom left
-		{ position.x, position.y }, // top left
-		{ position.x + size.x, position.y }, // top right
-		{ position.x + size.x, position.y + size.y } // bottom right
+		{ rect.position.x, rect.position.y + rect.size.y }, // bottom left
+		{ rect.position.x, rect.position.y }, // top left
+		{ rect.position.x + rect.size.x, rect.position.y }, // top right
+		{ rect.position.x + rect.size.x, rect.position.y + rect.size.y } // bottom right
 	};
 
-	for (uint16_t i = 0; i < 4; i++)
-		vertices.emplace_back(positions[i], color);
+	for (auto& position : positions)
+		vertices.emplace_back(position, rect.color);
 }

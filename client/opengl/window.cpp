@@ -37,3 +37,8 @@ const glm::mat4& opengl::window::getProjection() const
 {
 	return projection;
 }
+
+GLFWwindow* opengl::window::getNative() const
+{
+	return glfw;
+}
