@@ -1,35 +1,18 @@
-#include <memory>
-
 #include <iostream>
 
+#include <enet/enet.h>
+
 #include "opengl/window.hpp"
-#include "opengl/renderer.hpp"
-#include "opengl/input.hpp"
+#include "player.hpp"
 
-namespace game
+class client
 {
-	class player // todo: change to network player
+public:
+	client()
 	{
-	public:
-		player(float speed = 5.0f, const glm::vec2& size = { 4.0f, 125.0f }, const glm::vec3& color = { 1.0f, 1.0f, 1.0f }) : speed(speed), rect({ 15.0f, 15.0f }, size, color)
-		{
 
-		}
-
-		void update(const std::shared_ptr<opengl::renderer>& renderer, const std::shared_ptr<opengl::input>& input)
-		{
-			if (input->isPressed(keys::W))
-				rect.position.y += speed;
-			else if (input->isPressed(keys::S))
-				rect.position.y -= speed;
-
-			renderer->add(rect);
-		}
-	private:
-		const float speed;
-		opengl::rect rect;
-	};
-}
+	}
+};
 
 int main()
 {

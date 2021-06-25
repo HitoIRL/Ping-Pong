@@ -10,8 +10,8 @@ project "client"
     defines { "GLFW_INCLUDE_NONE" }
 
     files { "**.cpp", "**.hpp" }
-    includedirs { includes["glad"], includes["glfw"], includes["glm"] }
-    links { "glad", "glfw" }
+    includedirs { includes["glad"], includes["glfw"], includes["glm"], includes["enet"] }
+    links { "glad", "glfw", "enet" }
 
     filter "configurations:debug"
         runtime "Debug"
