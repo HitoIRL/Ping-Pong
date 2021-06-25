@@ -9,7 +9,7 @@ project "server"
 
     files { "**.cpp", "**.hpp" }
     includedirs { includes["enet"] }
-    links { "enet" }
+    links { "enet", "ws2_32", "winmm" }
 
     filter "configurations:debug"
         runtime "Debug"

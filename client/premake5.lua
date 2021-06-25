@@ -11,7 +11,7 @@ project "client"
 
     files { "**.cpp", "**.hpp" }
     includedirs { includes["glad"], includes["glfw"], includes["glm"], includes["enet"] }
-    links { "glad", "glfw", "enet" }
+    links { "glad", "glfw", "enet", "ws2_32", "winmm" }
 
     filter "configurations:debug"
         runtime "Debug"
