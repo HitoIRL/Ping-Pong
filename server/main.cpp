@@ -2,6 +2,11 @@
 
 #include <enet/enet.h>
 
+struct packet
+{
+	uint16_t type;
+};
+
 int main() // todo: into class
 {
 	if (enet_initialize())
@@ -38,7 +43,10 @@ int main() // todo: into class
 				std::cout << "client disconnected\n";
 				break;
 			case ENET_EVENT_TYPE_RECEIVE:
-				std::cout << event.packet->data << "\n";
+				packet* pa = (packet*)&event.data;
+
+				std::cout << (*pa).type << "\n";
+
 				enet_packet_destroy(event.packet);
 				break;
 			}

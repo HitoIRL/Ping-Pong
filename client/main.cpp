@@ -7,6 +7,11 @@
 
 namespace test
 {
+	struct packet
+	{
+		uint16_t type;
+	};
+
 	class client
 	{
 	public:
@@ -23,6 +28,20 @@ namespace test
 		~client()
 		{
 			enet_peer_disconnect(peer, 0);
+
+			while (enet_host_service(host, &event, 3000))
+			{
+				switch (event.type)
+				{
+				case ENET_EVENT_TYPE_RECEIVE:
+					enet_packet_destroy(event.packet);
+					break;
+				case ENET_EVENT_TYPE_DISCONNECT:
+					std::cout << "disconnected\n";
+					break;
+				}
+			}
+
 			enet_host_destroy(host);
 		}
 
@@ -49,10 +68,9 @@ namespace test
 			return true;
 		}
 
-		void send(const std::string& data)
+		void send(const packet& packet)
 		{
-			auto packet = enet_packet_create("test", strlen("test") + 1, ENET_PACKET_FLAG_RELIABLE);
-			enet_peer_send(peer, 0, packet);
+			enet_peer_send(peer, 0, enet_packet_create(&packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE));
 		}
 
 		void handle()
@@ -87,6 +105,7 @@ int main()
 		// game
 		auto player = std::make_unique<game::player>();
 
+		client->send({ 3 });
 		while (window->refresh())
 		{
 			client->handle();
