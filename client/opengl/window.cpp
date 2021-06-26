@@ -15,8 +15,7 @@ opengl::window::window(const std::string& title, const glm::uvec2& size) : proje
 	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)); // init glad
 
 	glViewport(0, 0, size.x, size.y);
-
-	// todo: error callback, logger
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 }
 
 opengl::window::~window()

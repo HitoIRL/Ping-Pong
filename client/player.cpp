@@ -20,7 +20,7 @@ void game::netPlayer::setY(float y)
 	rect.position.y = y;
 }
 
-game::player::player(float speed) : netPlayer({ 15.0f, 15.0f }), speed(speed), lastY(rect.position.y), moved(false)
+game::player::player(float speed) : netPlayer({ 30.0f, 30.0f }), speed(speed), lastY(rect.position.y), moved(false)
 {
 
 }
@@ -30,9 +30,9 @@ void game::player::update(const std::shared_ptr<opengl::input>& input)
 	moved = false;
 
 	// currently hardcoded
-	if (input->isPressed(keys::W) && rect.position.y < 580.0f)
+	if (input->isPressed(keys::W) && rect.position.y < 565.0f)
 		rect.position.y += speed;
-	else if (input->isPressed(keys::S) && rect.position.y > 15.0f)
+	else if (input->isPressed(keys::S) && rect.position.y > 30.0f)
 		rect.position.y -= speed;
 
 	if (lastY != rect.position.y)
