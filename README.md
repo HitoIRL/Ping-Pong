@@ -1,7 +1,7 @@
 # Ping Pong
 ### Build
 ```sh
-> git clone https://github.com/HitoIRL/ping-pong.git --recursive
+> git clone https://github.com/HitoIRL/ping-pong.git --recursive -j8
 > cd ping-pong
 > premake5 vs2019
 ```
