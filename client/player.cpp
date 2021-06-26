@@ -1,11 +1,31 @@
 #include "player.hpp"
 
-game::player::player(float speed, const glm::vec2& size, const glm::vec3& color) : speed(speed), rect({ 15.0f, 15.0f }, size, color), lastY(rect.position.y), moved(false)
+game::netPlayer::netPlayer(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color) : rect(position, size, color)
 {
 
 }
 
-void game::player::update(const std::shared_ptr<opengl::renderer>& renderer, const std::shared_ptr<opengl::input>& input)
+void game::netPlayer::render(const std::shared_ptr<opengl::renderer>& renderer)
+{
+	renderer->add(rect);
+}
+
+float game::netPlayer::getY() const
+{
+	return rect.position.y;
+}
+
+void game::netPlayer::setY(float y)
+{
+	rect.position.y = y;
+}
+
+game::player::player(float speed) : netPlayer({ 15.0f, 15.0f }), speed(speed), lastY(rect.position.y), moved(false)
+{
+
+}
+
+void game::player::update(const std::shared_ptr<opengl::input>& input)
 {
 	moved = false;
 
@@ -15,17 +35,10 @@ void game::player::update(const std::shared_ptr<opengl::renderer>& renderer, con
 	else if (input->isPressed(keys::S) && rect.position.y > 15.0f)
 		rect.position.y -= speed;
 
-	renderer->add(rect);
-
 	if (lastY != rect.position.y)
 		moved = true;
 
 	lastY = rect.position.y;
-}
-
-const opengl::rect& game::player::getRect() const
-{
-	return rect;
 }
 
 bool game::player::hasMoved() const

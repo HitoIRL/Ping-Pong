@@ -2,10 +2,32 @@
 
 #include <enet/enet.h>
 
+enum class packetType
+{
+	assignId,
+	updatePoisition
+};
+
 struct packet
 {
-	uint16_t type;
+	packetType type;
+	uint16_t id;
+	float y;
 };
+
+void send(const packet& packet, ENetPeer* peer, ENetHost* host)
+{
+	auto p = enet_packet_create(&packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+	enet_peer_send(peer, 0, p);
+	//enet_host_flush(host);
+}
+
+void broadcast(const packet& packet, ENetHost* host)
+{
+	auto p = enet_packet_create(&packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+	enet_host_broadcast(host, 0, p);
+	//enet_host_flush(host);
+}
 
 int main() // todo: into class
 {
@@ -30,6 +52,8 @@ int main() // todo: into class
 
 	std::cout << "listening...\n";
 
+	uint16_t id = 0;
+
 	while (true)
 	{
 		while (enet_host_service(host, &event, 1000))
@@ -38,14 +62,22 @@ int main() // todo: into class
 			{
 			case ENET_EVENT_TYPE_CONNECT:
 				std::cout << "client connected\n";
+				send({ packetType::assignId, id }, event.peer, host);
+				id++;
 				break;
 			case ENET_EVENT_TYPE_DISCONNECT:
 				std::cout << "client disconnected\n";
+				id--;
 				break;
 			case ENET_EVENT_TYPE_RECEIVE:
-				packet* pa = (packet*)&event.data;
+				auto p = *reinterpret_cast<packet*>(event.packet->data);
 
-				std::cout << (*pa).type << "\n";
+				switch (p.type)
+				{
+				case packetType::updatePoisition:
+					broadcast(p, host);
+					break;
+				}
 
 				enet_packet_destroy(event.packet);
 				break;

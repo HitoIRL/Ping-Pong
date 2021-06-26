@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-opengl::window::window(const std::string& title, const glm::uvec2& size) : projection(glm::ortho(0.0f, static_cast<float>(size.x), 0.0f, static_cast<float>(size.y)))
+opengl::window::window(const std::string& title, const glm::uvec2& size) : projection(glm::ortho(0.0f, static_cast<float>(size.x), 0.0f, static_cast<float>(size.y))), size(size)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -41,4 +41,9 @@ const glm::mat4& opengl::window::getProjection() const
 GLFWwindow* opengl::window::getNative() const
 {
 	return glfw;
+}
+
+const glm::uvec2& opengl::window::getSize() const
+{
+	return size;
 }

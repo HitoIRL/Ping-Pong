@@ -17,9 +17,11 @@ namespace opengl
 
 		bool refresh();
 		const glm::mat4& getProjection() const;
+		const glm::uvec2& getSize() const;
 		GLFWwindow* getNative() const;
 	private:
-		GLFWwindow* glfw; // glfw window
 		const glm::mat4 projection;
+		const glm::uvec2 size;
+		GLFWwindow* glfw;
 	};
 }

@@ -5,11 +5,22 @@
 #include "opengl/window.hpp"
 #include "player.hpp"
 
+std::unique_ptr<game::netPlayer> netPlayer;
+uint16_t id;
+
 namespace test
 {
+	enum class packetType
+	{
+		assignId,
+		updatePoisition
+	};
+
 	struct packet
 	{
-		uint16_t type;
+		packetType type;
+		uint16_t id;
+		float y;
 	};
 
 	class client
@@ -29,7 +40,7 @@ namespace test
 		{
 			enet_peer_disconnect(peer, 0);
 
-			while (enet_host_service(host, &event, 3000))
+			while (enet_host_service(host, &event, 1000))
 			{
 				switch (event.type)
 				{
@@ -70,7 +81,9 @@ namespace test
 
 		void send(const packet& packet)
 		{
-			enet_peer_send(peer, 0, enet_packet_create(&packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE));
+			auto p = enet_packet_create(&packet, sizeof(packet), ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(peer, 0, p);
+			//enet_host_flush(host);
 		}
 
 		void handle()
@@ -81,6 +94,21 @@ namespace test
 				{
 				case ENET_EVENT_TYPE_RECEIVE:
 					std::cout << "packet received\n";
+					auto p = *reinterpret_cast<packet*>(event.packet->data);
+
+					switch (p.type)
+					{
+					case packetType::assignId:
+						id = p.id;
+						std::cout << "assigned to new id (" << p.id << ")\n"; // todo: fmt
+						break;
+					case packetType::updatePoisition:
+						if (p.id == id) // if it's our position
+							return;
+
+						netPlayer->setY(p.y);
+						break;
+					}
 					break;
 				}
 			}
@@ -104,13 +132,18 @@ int main()
 
 		// game
 		auto player = std::make_unique<game::player>();
+		netPlayer = std::make_unique<game::netPlayer>(glm::vec2(window->getSize().x - 15.0f, 15.0f));
 
-		client->send({ 3 });
 		while (window->refresh())
 		{
 			client->handle();
 
-			player->update(renderer, input);
+			if (player->hasMoved())
+				client->send({ test::packetType::updatePoisition, id, player->getY() });
+
+			player->update(input);
+			player->render(renderer);
+			netPlayer->render(renderer);
 			renderer->render();
 		}
 	}

@@ -8,17 +8,28 @@
 
 namespace game
 {
-	class player
+	class netPlayer
 	{
 	public:
-		player(float speed = 5.0f, const glm::vec2& size = { 4.0f, 125.0f }, const glm::vec3& color = { 1.0f, 1.0f, 1.0f });
+		netPlayer(const glm::vec2& position, const glm::vec2& size = { 4.0f, 125.0f }, const glm::vec3& color = { 1.0f, 1.0f, 1.0f });
 
-		void update(const std::shared_ptr<opengl::renderer>& renderer, const std::shared_ptr<opengl::input>& input);
-		const opengl::rect& getRect() const;
+		void render(const std::shared_ptr<opengl::renderer>& renderer);
+		
+		float getY() const;
+		void setY(float y);
+	protected:
+		opengl::rect rect;
+	};
+
+	class player : public netPlayer
+	{
+	public:
+		player(float speed = 10.0f);
+
+		void update(const std::shared_ptr<opengl::input>& input);
 		bool hasMoved() const;
 	private:
 		const float speed;
-		opengl::rect rect;
 		float lastY;
 		bool moved;
 	};
